@@ -23,7 +23,7 @@ const UnderConstruction: React.FC<UnderConstructionProps> = ({ onBack }) => {
                 className="flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Back to Dashboard</span>
+                <span>Back to Agents Dashboard</span>
               </Button>
               <h1 className="text-xl font-bold text-gray-900">Feature Under Development</h1>
             </div>
@@ -51,7 +51,7 @@ const UnderConstruction: React.FC<UnderConstructionProps> = ({ onBack }) => {
             </div>
             
             <Button onClick={onBack} className="w-full">
-              Return to Dashboard
+              Return to Agents Dashboard
             </Button>
           </Card>
         </div>
