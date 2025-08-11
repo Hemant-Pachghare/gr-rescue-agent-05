@@ -33,6 +33,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
 
   // Make the check case-insensitive and more flexible
   const isInvoiceProcessing = formData.shortDescription.toLowerCase().includes('new tax invoice received: gujarat freight tools');
+  const isReportFailure = formData.shortDescription.toLowerCase().includes('monthly financial report generation failed');
 
   // Auto-populate fields based on short description
   useEffect(() => {
@@ -56,6 +57,26 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
         notify: 'AP Team Lead, Tax Compliance Team',
         aiProcessAgent: 'Automated Invoice Processor'
       }));
+    } else if (isReportFailure) {
+      setFormData(prev => ({
+        ...prev,
+        incidentNumber: 'INC0010133',
+        description: 'The automated monthly financial reporting job failed to complete, impacting the generation and distribution of critical management reports.',
+        contactType: 'Automated Monitoring',
+        caller: 'Finance Reporting Team',
+        category: 'Reporting & Analytics',
+        subcategory: 'Batch Job Failure',
+        service: 'Financial Reporting Services',
+        serviceOffering: 'Monthly Close Reporting',
+        configurationItem: 'Monthly Financial Report Job',
+        impact: 'High',
+        urgency: 'High',
+        priority: 'Critical',
+        assignmentGroup: 'IT Operations - Reporting',
+        assignedTo: '',
+        notify: 'Finance Reporting Team Lead',
+        aiProcessAgent: 'Reporting Automation Agent'
+      }));
     } else {
       // Reset to generic/empty values for other scenarios
       setFormData(prev => ({
@@ -78,11 +99,11 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
         aiProcessAgent: 'Generic AI Assistant'
       }));
     }
-  }, [formData.shortDescription, isInvoiceProcessing]);
+  }, [formData.shortDescription, isInvoiceProcessing, isReportFailure]);
 
   // Priority calculation logic
   const updatePriority = () => {
-    if (isInvoiceProcessing) return; // Don't override for invoice scenario
+    if (isInvoiceProcessing || isReportFailure) return; // Don't override for specific scenarios
     
     const { impact, urgency } = formData;
     let priority = 'Low';
@@ -103,10 +124,10 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
   };
 
   useEffect(() => {
-    if (!isInvoiceProcessing) {
+    if (!isInvoiceProcessing && !isReportFailure) {
       updatePriority();
     }
-  }, [formData.impact, formData.urgency, isInvoiceProcessing]);
+  }, [formData.impact, formData.urgency, isInvoiceProcessing, isReportFailure]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -120,16 +141,39 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
       return;
     }
 
-    const newTimeline = [{
-      id: 1,
-      type: 'creation',
-      title: isInvoiceProcessing ? 'Invoice Received' : 'Incident Created',
-      description: isInvoiceProcessing 
-        ? `New invoice ${formData.incidentNumber} (GST-3425-26) detected by Email Inbox Agent.`
-        : `New incident ${formData.incidentNumber} submitted by ${formData.caller || 'User'} regarding "${formData.shortDescription}".`,
-      timestamp: new Date(),
-      status: 'completed'
-    }];
+    let newTimeline = [];
+    let ticketType = 'incident';
+
+    if (isInvoiceProcessing) {
+      ticketType = 'invoice';
+      newTimeline = [{
+        id: 1,
+        type: 'creation',
+        title: 'Invoice Received',
+        description: `New invoice ${formData.incidentNumber} (GST-3425-26) detected by Email Inbox Agent.`,
+        timestamp: new Date(),
+        status: 'completed'
+      }];
+    } else if (isReportFailure) {
+      ticketType = 'report';
+      newTimeline = [{
+        id: 1,
+        type: 'creation',
+        title: 'Incident Created',
+        description: `New incident ${formData.incidentNumber} submitted by Automated Monitoring (Finance) regarding 'Monthly Financial Report Generation Failed.'`,
+        timestamp: new Date(),
+        status: 'completed'
+      }];
+    } else {
+      newTimeline = [{
+        id: 1,
+        type: 'creation',
+        title: 'Incident Created',
+        description: `New incident ${formData.incidentNumber} submitted by ${formData.caller || 'User'} regarding "${formData.shortDescription}".`,
+        timestamp: new Date(),
+        status: 'completed'
+      }];
+    }
 
     setTicketData({
       ...ticketData,
@@ -137,16 +181,22 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
       subject: formData.shortDescription,
       description: formData.description,
       isInvoiceProcessing: isInvoiceProcessing,
+      isReportFailure: isReportFailure,
       status: 'Open',
       priority: formData.priority,
       timeline: newTimeline
     });
 
+    let successMessage = "Incident created successfully. Click 'Show Backend Actions' to proceed.";
+    if (isInvoiceProcessing) {
+      successMessage = "Invoice received successfully. Click 'Start Processing' to begin workflow.";
+    } else if (isReportFailure) {
+      successMessage = "Report failure incident created successfully. Click 'Show Backend Actions' to proceed with triage.";
+    }
+
     toast({
       title: "Success",
-      description: isInvoiceProcessing 
-        ? "Invoice received successfully. Click 'Start Processing' to begin workflow." 
-        : "Manufacturing incident created successfully. Click 'Show Backend Actions' to proceed with triage.",
+      description: successMessage,
     });
 
     if (onSubmit) {
@@ -155,10 +205,32 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
   };
 
   const handleCancel = () => {
+    let cancelMessage = "Incident creation cancelled";
+    if (isInvoiceProcessing) {
+      cancelMessage = "Invoice submission cancelled";
+    } else if (isReportFailure) {
+      cancelMessage = "Report failure incident creation cancelled";
+    }
+
     toast({
       title: "Cancelled",
-      description: isInvoiceProcessing ? "Invoice submission cancelled" : "Incident creation cancelled",
+      description: cancelMessage,
     });
+  };
+
+  const getPageTitle = () => {
+    if (isInvoiceProcessing) {
+      return 'Submit New Invoice for Processing';
+    } else if (isReportFailure) {
+      return 'Create New Operational Incident';
+    }
+    return 'Create New Manufacturing Incident';
+  };
+
+  const getHeaderIcon = () => {
+    if (isInvoiceProcessing) return 'INV';
+    if (isReportFailure) return 'RPT';
+    return 'MFG';
   };
 
   return (
@@ -169,10 +241,10 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                {isInvoiceProcessing ? 'INV' : 'MFG'}
+                {getHeaderIcon()}
               </div>
               <h1 className="text-2xl font-bold">
-                {isInvoiceProcessing ? 'Submit New Invoice for Processing' : 'Create New Manufacturing Incident'}
+                {getPageTitle()}
               </h1>
             </div>
             <div className="flex space-x-2">
@@ -203,7 +275,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                   id="shortDescription"
                   value={formData.shortDescription}
                   onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-                  placeholder="Type 'New Tax Invoice Received: Gujarat Freight Tools' or other"
+                  placeholder="Type 'New Tax Invoice Received: Gujarat Freight Tools' OR 'Monthly Financial Report Generation Failed' OR other"
                 />
               </div>
               
@@ -240,6 +312,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                   <SelectContent>
                     <SelectItem value="Self-service">Self-service</SelectItem>
                     <SelectItem value="Automated System">Automated System</SelectItem>
+                    <SelectItem value="Automated Monitoring">Automated Monitoring</SelectItem>
                     <SelectItem value="User Submitted">User Submitted</SelectItem>
                     <SelectItem value="Phone">Phone</SelectItem>
                     <SelectItem value="Email">Email</SelectItem>
@@ -259,7 +332,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     id="caller"
                     value={formData.caller}
                     onChange={(e) => setFormData({ ...formData, caller: e.target.value })}
-                    placeholder={isInvoiceProcessing ? "" : "Enter caller name"}
+                    placeholder={isInvoiceProcessing || isReportFailure ? "" : "Enter caller name"}
                   />
                 </div>
 
@@ -271,6 +344,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Invoice Processing">Invoice Processing</SelectItem>
+                      <SelectItem value="Reporting & Analytics">Reporting & Analytics</SelectItem>
                       <SelectItem value="Production Systems">Production Systems</SelectItem>
                       <SelectItem value="Supply Chain">Supply Chain</SelectItem>
                       <SelectItem value="Quality Control">Quality Control</SelectItem>
@@ -292,6 +366,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     <SelectContent>
                       <SelectItem value="--None--">--None--</SelectItem>
                       <SelectItem value="Tax Invoice Processing">Tax Invoice Processing</SelectItem>
+                      <SelectItem value="Batch Job Failure">Batch Job Failure</SelectItem>
                       <SelectItem value="SAP - Materials Management (MM)">SAP - Materials Management (MM)</SelectItem>
                       <SelectItem value="SAP - Production Planning (PP)">SAP - Production Planning (PP)</SelectItem>
                       <SelectItem value="SAP - Quality Management (QM)">SAP - Quality Management (QM)</SelectItem>
@@ -311,7 +386,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     id="service"
                     value={formData.service}
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                    placeholder={isInvoiceProcessing ? "" : "Enter service"}
+                    placeholder={isInvoiceProcessing || isReportFailure ? "" : "Enter service"}
                   />
                 </div>
 
@@ -321,7 +396,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     id="serviceOffering"
                     value={formData.serviceOffering}
                     onChange={(e) => setFormData({ ...formData, serviceOffering: e.target.value })}
-                    placeholder={isInvoiceProcessing ? "" : "Enter service offering"}
+                    placeholder={isInvoiceProcessing || isReportFailure ? "" : "Enter service offering"}
                   />
                 </div>
 
@@ -331,7 +406,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     id="configurationItem"
                     value={formData.configurationItem}
                     onChange={(e) => setFormData({ ...formData, configurationItem: e.target.value })}
-                    placeholder={isInvoiceProcessing ? "" : "Enter configuration item"}
+                    placeholder={isInvoiceProcessing || isReportFailure ? "" : "Enter configuration item"}
                   />
                 </div>
 
@@ -347,6 +422,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                       <SelectItem value="Batch Job Automation Agent">Batch Job Automation Agent</SelectItem>
                       <SelectItem value="PO Goods Receipt Agent">PO Goods Receipt Agent</SelectItem>
                       <SelectItem value="E-commerce Sales Order Integration Agent">E-commerce Sales Order Integration Agent</SelectItem>
+                      <SelectItem value="Reporting Automation Agent">Reporting Automation Agent</SelectItem>
                       <SelectItem value="Generic AI Assistant">Generic AI Assistant</SelectItem>
                     </SelectContent>
                   </Select>
@@ -411,6 +487,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="AP Automation Agent">AP Automation Agent</SelectItem>
+                      <SelectItem value="IT Operations - Reporting">IT Operations - Reporting</SelectItem>
                       <SelectItem value="SAP Basis Team">SAP Basis Team</SelectItem>
                       <SelectItem value="SAP Functional - MM">SAP Functional - MM</SelectItem>
                       <SelectItem value="Integration Support">Integration Support</SelectItem>
@@ -443,6 +520,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                       <SelectItem value="Notify Caller">Notify Caller</SelectItem>
                       <SelectItem value="Notify Assignment Group">Notify Assignment Group</SelectItem>
                       <SelectItem value="AP Team Lead, Tax Compliance Team">AP Team Lead, Tax Compliance Team</SelectItem>
+                      <SelectItem value="Finance Reporting Team Lead">Finance Reporting Team Lead</SelectItem>
                       <SelectItem value="Data Operations Team Lead">Data Operations Team Lead</SelectItem>
                       <SelectItem value="Sales Team Lead">Sales Team Lead</SelectItem>
                     </SelectContent>

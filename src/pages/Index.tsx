@@ -26,35 +26,51 @@ const Index = () => {
     confidence: 92,
     status: 'New',
     timeline: [],
-    isInvoiceProcessing: false
+    isInvoiceProcessing: false,
+    isReportFailure: false
   });
 
   const isInvoiceProcessing = ticketData.isInvoiceProcessing;
+  const isReportFailure = ticketData.isReportFailure;
+
+  const getScreenTitle = (screen, isInvoice, isReport) => {
+    const screenTitles = {
+      dashboard: 'Incident Dashboard',
+      incident: isInvoice ? 'Submit New Invoice for Processing' : isReport ? 'Create New Operational Incident' : 'New Incident',
+      triage: isInvoice ? 'Invoice Ingestion & Initial Extraction' : isReport ? 'Incident Auto-Triage & Classification' : 'Agent Auto-Triage',
+      rca: isInvoice ? 'Tax Invoice Data Extraction & Validation' : isReport ? 'Report Failure Root Cause Analysis' : 'RCA',
+      proposal: isInvoice ? 'Tax Invoice Review & Approval' : isReport ? 'Proposed Resolution for Report Failure' : 'Resolution Proposal',
+      execution: isInvoice ? 'ERP Posting Execution - AI Action In Progress' : isReport ? 'Database/Job Scheduler Execution - AI Action In Progress' : 'SAP Execution',
+      closure: isInvoice ? 'Invoice Processed & Archived!' : isReport ? 'Issue Resolved & Ticket Closed!' : 'Ticket Closure'
+    };
+    
+    return screenTitles[screen] || 'Incident Management';
+  };
 
   const screens = {
     dashboard: { title: 'Incident Dashboard', component: Dashboard },
     incident: { 
-      title: isInvoiceProcessing ? 'Submit New Invoice for Processing' : 'New Incident', 
+      title: getScreenTitle('incident', isInvoiceProcessing, isReportFailure), 
       component: IncidentCreation 
     },
     triage: { 
-      title: isInvoiceProcessing ? 'Invoice Ingestion & Initial Extraction' : 'Agent Auto-Triage', 
+      title: getScreenTitle('triage', isInvoiceProcessing, isReportFailure), 
       component: AgentTriage 
     },
     rca: { 
-      title: isInvoiceProcessing ? 'Tax Invoice Data Extraction & Validation' : 'RCA', 
+      title: getScreenTitle('rca', isInvoiceProcessing, isReportFailure), 
       component: RCAAnalysis 
     },
     proposal: { 
-      title: isInvoiceProcessing ? 'Tax Invoice Review & Approval' : 'Resolution Proposal', 
+      title: getScreenTitle('proposal', isInvoiceProcessing, isReportFailure), 
       component: ResolutionProposal 
     },
     execution: { 
-      title: isInvoiceProcessing ? 'ERP Posting Execution - AI Action In Progress' : 'SAP Execution', 
+      title: getScreenTitle('execution', isInvoiceProcessing, isReportFailure), 
       component: SAPExecution 
     },
     closure: { 
-      title: isInvoiceProcessing ? 'Invoice Processed & Archived!' : 'Ticket Closure', 
+      title: getScreenTitle('closure', isInvoiceProcessing, isReportFailure), 
       component: TicketClosure 
     }
   };
@@ -87,6 +103,58 @@ const Index = () => {
   const handleNavigation = (screen) => {
     setCurrentScreen(screen);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const getStepLabel = (step) => {
+    if (isInvoiceProcessing) {
+      const invoiceLabels = {
+        incident: 'Invoice Submission',
+        proposal: 'Human Review',
+        execution: 'ERP Posting',
+        closure: 'Processing Complete'
+      };
+      return invoiceLabels[step] || step;
+    } else if (isReportFailure) {
+      const reportLabels = {
+        incident: 'Report Incident',
+        proposal: 'Resolution Proposal',
+        execution: 'Database/Job Fix',
+        closure: 'Issue Resolved'
+      };
+      return reportLabels[step] || step;
+    } else {
+      const defaultLabels = {
+        incident: 'New Incident',
+        proposal: 'Resolution Proposal',
+        execution: 'SAP Execution',
+        closure: 'Ticket Closure'
+      };
+      return defaultLabels[step] || step;
+    }
+  };
+
+  const getBackendActionsLabel = () => {
+    if (isInvoiceProcessing) return '[Start Processing]';
+    if (isReportFailure) return '[Show Backend Actions]';
+    return '[Show Backend Actions]';
+  };
+
+  const getBackendGroupLabel = () => {
+    if (isInvoiceProcessing) return 'Processing Actions';
+    if (isReportFailure) return 'Analysis Actions';
+    return 'Backend Actions';
+  };
+
+  const getTriageLabel = () => {
+    if (isInvoiceProcessing) return 'Orchestration';
+    if (isReportFailure) return 'Auto-Triage';
+    return 'Agent Auto-Triage';
+  };
+
+  const getRCALabel = () => {
+    if (isInvoiceProcessing) return 'Data Extraction';
+    if (isReportFailure) return 'RCA';
+    return 'RCA';
   };
 
   return (
@@ -132,7 +200,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 1
               </span>
-              {isInvoiceProcessing ? 'Invoice Submission' : 'New Incident'}
+              {getStepLabel('incident')}
             </Button>
 
             {/* Show Backend Actions button OR Backend Actions group */}
@@ -145,12 +213,12 @@ const Index = () => {
                 disabled={!incidentSubmitted}
               >
                 <Cog className="mr-1 h-3 w-3" />
-                {isInvoiceProcessing ? '[Start Processing]' : '[Show Backend Actions]'}
+                {getBackendActionsLabel()}
               </Button>
             ) : (
               <div className="flex items-center space-x-1 px-2 py-1 bg-gray-50 rounded-md border border-gray-200 h-7">
                 <span className="text-xs font-medium text-gray-600 italic">
-                  {isInvoiceProcessing ? 'Processing Actions' : 'Backend Actions'}
+                  {getBackendGroupLabel()}
                 </span>
                 <div className="flex space-x-1">
                   <Button
@@ -159,7 +227,7 @@ const Index = () => {
                     onClick={() => handleNavigation('triage')}
                     className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
                   >
-                    {isInvoiceProcessing ? 'Orchestration' : 'Agent Auto-Triage'}
+                    {getTriageLabel()}
                   </Button>
                   <Button
                     variant={currentScreen === 'rca' ? 'default' : 'outline'}
@@ -167,7 +235,7 @@ const Index = () => {
                     onClick={() => handleNavigation('rca')}
                     className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
                   >
-                    {isInvoiceProcessing ? 'Data Extraction' : 'RCA'}
+                    {getRCALabel()}
                   </Button>
                 </div>
               </div>
@@ -183,7 +251,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 2
               </span>
-              {isInvoiceProcessing ? 'Human Review' : 'Resolution Proposal'}
+              {getStepLabel('proposal')}
             </Button>
 
             <Button
@@ -195,7 +263,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 3
               </span>
-              {isInvoiceProcessing ? 'ERP Posting' : 'SAP Execution'}
+              {getStepLabel('execution')}
             </Button>
 
             <Button
@@ -207,7 +275,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 4
               </span>
-              {isInvoiceProcessing ? 'Processing Complete' : 'Ticket Closure'}
+              {getStepLabel('closure')}
             </Button>
           </div>
         </div>
