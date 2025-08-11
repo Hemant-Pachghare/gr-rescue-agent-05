@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,9 +12,12 @@ import RCAAnalysis from '@/components/RCAAnalysis';
 import ResolutionProposal from '@/components/ResolutionProposal';
 import SAPExecution from '@/components/SAPExecution';
 import TicketClosure from '@/components/TicketClosure';
+import AgentsDashboard from '@/components/AgentsDashboard';
+import InvoiceTicketList from '@/components/InvoiceTicketList';
+import UnderConstruction from '@/components/UnderConstruction';
 
 const Index = () => {
-  const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [currentScreen, setCurrentScreen] = useState('agents-dashboard');
   const [showBackendActions, setShowBackendActions] = useState(false);
   const [incidentSubmitted, setIncidentSubmitted] = useState(false);
   const [ticketData, setTicketData] = useState({
@@ -35,6 +37,9 @@ const Index = () => {
 
   const getScreenTitle = (screen, isInvoice, isReport) => {
     const screenTitles = {
+      'agents-dashboard': 'AI Process Agents Overview',
+      'invoice-list': 'Automated Invoice Processor - Active Worklist',
+      'under-construction': 'Under Construction',
       dashboard: 'Incident Dashboard',
       incident: isInvoice ? 'Submit New Invoice for Processing' : isReport ? 'Create New Operational Incident' : 'New Incident',
       triage: isInvoice ? 'Invoice Ingestion & Initial Extraction' : isReport ? 'Incident Auto-Triage & Classification' : 'Agent Auto-Triage',
@@ -44,10 +49,13 @@ const Index = () => {
       closure: isInvoice ? 'Invoice Processed & Archived!' : isReport ? 'Issue Resolved & Ticket Closed!' : 'Ticket Closure'
     };
     
-    return screenTitles[screen] || 'Incident Management';
+    return screenTitles[screen] || 'AI Process Management';
   };
 
   const screens = {
+    'agents-dashboard': { title: 'AI Process Agents Overview', component: AgentsDashboard },
+    'invoice-list': { title: 'Invoice Processing - Active Worklist', component: InvoiceTicketList },
+    'under-construction': { title: 'Under Construction', component: UnderConstruction },
     dashboard: { title: 'Incident Dashboard', component: Dashboard },
     incident: { 
       title: getScreenTitle('incident', isInvoiceProcessing, isReportFailure), 
@@ -77,29 +85,58 @@ const Index = () => {
 
   const CurrentComponent = screens[currentScreen]?.component;
 
+  const handleAgentSelect = (destination) => {
+    setCurrentScreen(destination);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleInvoiceSelect = (invoiceData, destination) => {
+    if (invoiceData) {
+      setTicketData(invoiceData);
+      setIncidentSubmitted(true);
+      setShowBackendActions(true);
+    }
+    setCurrentScreen(destination);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentScreen('agents-dashboard');
+    setShowBackendActions(false);
+    setIncidentSubmitted(false);
+    setTicketData({
+      id: 'INC0001234',
+      subject: '',
+      description: '',
+      poNumber: '',
+      confidence: 92,
+      status: 'New',
+      timeline: [],
+      isInvoiceProcessing: false,
+      isReportFailure: false
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleCreateNew = () => {
     setCurrentScreen('incident');
     setIncidentSubmitted(false);
     setShowBackendActions(false);
-    // Scroll to top when navigating to new screen
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleIncidentSubmit = () => {
     setIncidentSubmitted(true);
-    // Stay on incident screen after submit
   };
 
   const handleShowBackendActions = () => {
     if (incidentSubmitted) {
       setShowBackendActions(true);
-      setCurrentScreen('triage'); // Navigate to Agent Auto-Triage
-      // Scroll to top when navigating to new screen
+      setCurrentScreen('triage');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  // Add scroll to top functionality for all navigation
   const handleNavigation = (screen) => {
     setCurrentScreen(screen);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -157,6 +194,8 @@ const Index = () => {
     return 'RCA';
   };
 
+  const isWorkflowScreen = !['agents-dashboard', 'invoice-list', 'under-construction', 'dashboard'].includes(currentScreen);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
       {/* Navigation Header */}
@@ -165,10 +204,10 @@ const Index = () => {
           <div className="flex justify-between items-center h-12">
             <div className="flex items-center">
               <h1 className="text-base font-semibold text-gray-900">
-                {screens[currentScreen]?.title || 'Incident Management'}
+                {screens[currentScreen]?.title || 'AI Process Management'}
               </h1>
             </div>
-            {currentScreen !== 'dashboard' && (
+            {isWorkflowScreen && (
               <Badge variant={ticketData.status === 'Closed' ? 'default' : 'secondary'}>
                 {ticketData.id} - {ticketData.status}
               </Badge>
@@ -177,17 +216,17 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Screen Navigation Pills - Only show when not on dashboard */}
-      {currentScreen !== 'dashboard' && (
+      {/* Screen Navigation Pills - Only show for workflow screens */}
+      {isWorkflowScreen && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex space-x-2 overflow-x-auto items-center">
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleNavigation('dashboard')}
+              onClick={handleBackToDashboard}
               className="whitespace-nowrap text-xs px-2 py-1 h-7"
             >
-              ← Back to Dashboard
+              ← Back to Agents
             </Button>
             
             {/* Step 1: New Incident */}
@@ -293,6 +332,9 @@ const Index = () => {
             }}
             onCreateNew={handleCreateNew}
             onSubmit={handleIncidentSubmit}
+            onAgentSelect={handleAgentSelect}
+            onInvoiceSelect={handleInvoiceSelect}
+            onBack={currentScreen === 'invoice-list' ? () => handleAgentSelect('agents-dashboard') : handleBackToDashboard}
           />
         )}
       </div>
