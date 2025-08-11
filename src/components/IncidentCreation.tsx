@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,9 +30,10 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
     aiProcessAgent: 'Generic AI Assistant'
   });
 
-  // Make the check case-insensitive and more flexible
-  const isInvoiceProcessing = formData.shortDescription.toLowerCase().includes('new tax invoice received: gujarat freight tools');
-  const isReportFailure = formData.shortDescription.toLowerCase().includes('monthly financial report generation failed');
+  // Make the checks more flexible and case-insensitive
+  const shortDescLower = formData.shortDescription.toLowerCase();
+  const isInvoiceProcessing = shortDescLower.includes('new tax invoice received') && shortDescLower.includes('gujarat freight tools');
+  const isReportFailure = shortDescLower.includes('monthly financial report') && (shortDescLower.includes('generation failed') || shortDescLower.includes('failure'));
 
   // Auto-populate fields based on short description
   useEffect(() => {
