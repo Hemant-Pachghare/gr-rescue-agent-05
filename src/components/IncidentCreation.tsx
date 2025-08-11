@@ -27,7 +27,8 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
     assignedTo: '',
     notify: '',
     shortDescription: '',
-    description: ''
+    description: '',
+    aiProcessAgent: 'Generic AI Assistant'
   });
 
   const isInvoiceProcessing = formData.shortDescription === 'New Tax Invoice Received: Gujarat Freight Tools';
@@ -50,7 +51,8 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
         urgency: 'Medium',
         priority: 'Standard',
         assignmentGroup: 'AP Automation Agent',
-        notify: 'AP Team Lead, Tax Compliance Team'
+        notify: 'AP Team Lead, Tax Compliance Team',
+        aiProcessAgent: 'Automated Invoice Processor'
       }));
     } else {
       // Reset to generic/empty values for other scenarios
@@ -69,7 +71,8 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
         urgency: prev.shortDescription === '' ? '' : 'Select Urgency',
         priority: prev.shortDescription === '' ? '' : 'Select Priority',
         assignmentGroup: prev.shortDescription === '' ? '' : 'Select Assignment Group',
-        notify: prev.shortDescription === '' ? '' : 'Select Notification Recipient'
+        notify: prev.shortDescription === '' ? '' : 'Select Notification Recipient',
+        aiProcessAgent: 'Generic AI Assistant'
       }));
     }
   }, [formData.shortDescription, isInvoiceProcessing]);
@@ -327,6 +330,23 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                     onChange={(e) => setFormData({ ...formData, configurationItem: e.target.value })}
                     placeholder={isInvoiceProcessing ? "" : "Enter configuration item"}
                   />
+                </div>
+
+                {/* NEW FIELD: AI Process Agent */}
+                <div>
+                  <Label htmlFor="aiProcessAgent" className="text-slate-600 font-medium">AI Process Agent</Label>
+                  <Select value={formData.aiProcessAgent} onValueChange={(value) => setFormData({ ...formData, aiProcessAgent: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Automated Invoice Processor">Automated Invoice Processor</SelectItem>
+                      <SelectItem value="Batch Job Automation Agent">Batch Job Automation Agent</SelectItem>
+                      <SelectItem value="PO Goods Receipt Agent">PO Goods Receipt Agent</SelectItem>
+                      <SelectItem value="E-commerce Sales Order Integration Agent">E-commerce Sales Order Integration Agent</SelectItem>
+                      <SelectItem value="Generic AI Assistant">Generic AI Assistant</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
