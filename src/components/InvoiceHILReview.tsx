@@ -129,6 +129,59 @@ const InvoiceHILReview = ({ ticketData, setTicketData, onNext }) => {
                     </div>
                   </div>
 
+                  {/* Invoice Line Items */}
+                  <div className="bg-white border border-gray-200 rounded-lg p-4">
+                    <h4 className="font-medium text-gray-800 mb-4">Invoice Line Items (Extracted by Data Agents)</h4>
+                    <div className="space-y-4">
+                      {/* Item 1 */}
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-800">Item: Bosch All-in-one Metal Hand Tool Kit</div>
+                        </div>
+                        <div className="flex items-center space-x-8">
+                          <div className="text-right">
+                            <div className="font-medium text-gray-800">Amount: ₹2,991.30</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-medium text-gray-800">GL Code: 40010</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Item 2 */}
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-800">Item: Taparia Universal Tool Kit</div>
+                        </div>
+                        <div className="flex items-center space-x-8">
+                          <div className="text-right">
+                            <div className="font-medium text-gray-800">Amount: ₹1,498.60</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-medium text-gray-800">GL Code: 40010</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Tax */}
+                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
+                        <div className="flex justify-between items-center">
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-800">Tax: IGST @ 18%</div>
+                          </div>
+                          <div className="flex items-center space-x-8">
+                            <div className="text-right">
+                              <div className="font-medium text-gray-800">Amount: ₹684.90</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-medium text-gray-800">Tax Code: I0</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Invoice Document */}
                   <div className="bg-white border border-gray-200 rounded-lg p-4">
                     <h4 className="font-medium text-gray-800 mb-3">Original Tax Invoice Document</h4>
