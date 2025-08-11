@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,9 @@ import TicketClosure from '@/components/TicketClosure';
 import AgentsDashboard from '@/components/AgentsDashboard';
 import InvoiceTicketList from '@/components/InvoiceTicketList';
 import UnderConstruction from '@/components/UnderConstruction';
+import InvoiceHILReview from '@/components/InvoiceHILReview';
+import InvoiceERPPosting from '@/components/InvoiceERPPosting';
+import InvoiceClosure from '@/components/InvoiceClosure';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState('agents-dashboard');
@@ -46,6 +48,9 @@ const Index = () => {
       triage: isInvoice ? 'Invoice Ingestion & Initial Extraction' : isReport ? 'Incident Auto-Triage & Classification' : 'Agent Auto-Triage',
       rca: isInvoice ? 'Tax Invoice Data Extraction & Validation' : isReport ? 'Report Failure Root Cause Analysis' : 'RCA',
       proposal: isInvoice ? 'Tax Invoice Review & Approval' : isReport ? 'Proposed Resolution for Report Failure' : 'Resolution Proposal',
+      'hil-review': 'Tax Invoice Review & Approval',
+      'erp-posting': 'ERP Posting Execution - AI Action In Progress',
+      'invoice-closure': 'Invoice Processed & Archived!',
       execution: isInvoice ? 'ERP Posting Execution - AI Action In Progress' : isReport ? 'Database/Job Scheduler Execution - AI Action In Progress' : 'SAP Execution',
       closure: isInvoice ? 'Invoice Processed & Archived!' : isReport ? 'Issue Resolved & Ticket Closed!' : 'Ticket Closure'
     };
@@ -73,6 +78,18 @@ const Index = () => {
     proposal: { 
       title: getScreenTitle('proposal', isInvoiceProcessing, isReportFailure), 
       component: ResolutionProposal 
+    },
+    'hil-review': {
+      title: 'Tax Invoice Review & Approval',
+      component: InvoiceHILReview
+    },
+    'erp-posting': {
+      title: 'ERP Posting Execution - AI Action In Progress',
+      component: InvoiceERPPosting
+    },
+    'invoice-closure': {
+      title: 'Invoice Processed & Archived!',
+      component: InvoiceClosure
     },
     execution: { 
       title: getScreenTitle('execution', isInvoiceProcessing, isReportFailure), 
@@ -125,18 +142,51 @@ const Index = () => {
 
   const handleInvoiceSelect = (invoiceId) => {
     if (invoiceId === 'GUJARAT FREIGHT TOOLS') {
+      // Initialize the invoice processing timeline with agent details
+      const initialTimeline = [
+        {
+          id: 1,
+          type: 'invoice_received',
+          title: 'Invoice Received via Email Inbox Agent',
+          description: 'Invoice INV0001002 (GST-3425-26) received via Email Inbox Agent (Data Agent) from GUJARAT FREIGHT TOOLS.',
+          timestamp: new Date(Date.now() - 300000), // 5 minutes ago
+          icon: FileText,
+          status: 'completed'
+        },
+        {
+          id: 2,
+          type: 'orchestrator_initiated',
+          title: 'Orchestrator Agent Initiated',
+          description: 'Orchestrator Agent initiated workflow for automated invoice processing.',
+          timestamp: new Date(Date.now() - 240000), // 4 minutes ago
+          icon: Bot,
+          status: 'completed'
+        },
+        {
+          id: 3,
+          type: 'data_extraction',
+          title: 'OCR Data Extraction & Validation Complete',
+          description: 'OCR Invoice Reader Agent (Data Agent) completed data extraction. Invoice Data Validator and Duplicate Check Agent (Analysis Agents) performed advanced validation, no deviations. GL Code Suggester Agent (Analysis Agent) proposed GL Account: 40010 - Tool & Equipment Purchases.',
+          timestamp: new Date(Date.now() - 180000), // 3 minutes ago
+          icon: CheckCircle,
+          status: 'completed'
+        }
+      ];
+
       // Set up for invoice processing workflow
       setTicketData(prev => ({
         ...prev,
+        id: 'INV0001002',
         isInvoiceProcessing: true,
         isReportFailure: false,
-        subject: 'Tax Invoice Processing',
-        description: `Processing invoice from ${invoiceId}`,
-        status: 'In Progress'
+        subject: 'Tax Invoice Processing - GUJARAT FREIGHT TOOLS',
+        description: `Processing Tax Invoice GST-3425-26 from GUJARAT FREIGHT TOOLS (₹4,490.00)`,
+        status: 'In Review',
+        timeline: initialTimeline
       }));
       setIncidentSubmitted(true);
       setShowBackendActions(true);
-      setCurrentScreen('proposal'); // Start at HIL review stage
+      setCurrentScreen('hil-review'); // Start at HIL review stage
     } else {
       setCurrentScreen('under-construction');
     }
@@ -222,7 +272,7 @@ const Index = () => {
               </h1>
             </div>
             {currentScreen !== 'dashboard' && (
-              <Badge variant={ticketData.status === 'Closed' ? 'default' : 'secondary'}>
+              <Badge variant={ticketData.status === 'Closed' || ticketData.status === 'Archived' ? 'default' : 'secondary'}>
                 {ticketData.id} - {ticketData.status}
               </Badge>
             )}
@@ -243,93 +293,136 @@ const Index = () => {
               ← Back to Dashboard
             </Button>
             
-            {/* Step 1: New Incident */}
-            <Button
-              variant={currentScreen === 'incident' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleNavigation('incident')}
-              className="whitespace-nowrap text-xs px-2 py-1 h-7"
-            >
-              <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
-                1
-              </span>
-              {getStepLabel('incident')}
-            </Button>
+            {/* For invoice processing, show different navigation */}
+            {isInvoiceProcessing ? (
+              <>
+                <Button
+                  variant={currentScreen === 'hil-review' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('hil-review')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    1
+                  </span>
+                  Human Review
+                </Button>
 
-            {/* Show Backend Actions button OR Backend Actions group */}
-            {!showBackendActions ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShowBackendActions}
-                className="whitespace-nowrap bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 text-xs px-2 py-1 h-7"
-                disabled={!incidentSubmitted}
-              >
-                <Cog className="mr-1 h-3 w-3" />
-                {getBackendActionsLabel()}
-              </Button>
+                <Button
+                  variant={currentScreen === 'erp-posting' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('erp-posting')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    2
+                  </span>
+                  ERP Posting
+                </Button>
+
+                <Button
+                  variant={currentScreen === 'invoice-closure' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('invoice-closure')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    3
+                  </span>
+                  Archived
+                </Button>
+              </>
             ) : (
-              <div className="flex items-center space-x-1 px-2 py-1 bg-gray-50 rounded-md border border-gray-200 h-7">
-                <span className="text-xs font-medium text-gray-600 italic">
-                  {getBackendGroupLabel()}
-                </span>
-                <div className="flex space-x-1">
+              <>
+                {/* Original navigation for other workflows */}
+                <Button
+                  variant={currentScreen === 'incident' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('incident')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    1
+                  </span>
+                  {getStepLabel('incident')}
+                </Button>
+
+                {/* Show Backend Actions button OR Backend Actions group */}
+                {!showBackendActions ? (
                   <Button
-                    variant={currentScreen === 'triage' ? 'default' : 'outline'}
+                    variant="outline"
                     size="sm"
-                    onClick={() => handleNavigation('triage')}
-                    className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
+                    onClick={handleShowBackendActions}
+                    className="whitespace-nowrap bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 text-xs px-2 py-1 h-7"
+                    disabled={!incidentSubmitted}
                   >
-                    {getTriageLabel()}
+                    <Cog className="mr-1 h-3 w-3" />
+                    {getBackendActionsLabel()}
                   </Button>
-                  <Button
-                    variant={currentScreen === 'rca' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => handleNavigation('rca')}
-                    className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
-                  >
-                    {getRCALabel()}
-                  </Button>
-                </div>
-              </div>
+                ) : (
+                  <div className="flex items-center space-x-1 px-2 py-1 bg-gray-50 rounded-md border border-gray-200 h-7">
+                    <span className="text-xs font-medium text-gray-600 italic">
+                      {getBackendGroupLabel()}
+                    </span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant={currentScreen === 'triage' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleNavigation('triage')}
+                        className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
+                      >
+                        {getTriageLabel()}
+                      </Button>
+                      <Button
+                        variant={currentScreen === 'rca' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleNavigation('rca')}
+                        className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
+                      >
+                        {getRCALabel()}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Remaining steps with proper numbering */}
+                <Button
+                  variant={currentScreen === 'proposal' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('proposal')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    2
+                  </span>
+                  {getStepLabel('proposal')}
+                </Button>
+
+                <Button
+                  variant={currentScreen === 'execution' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('execution')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    3
+                  </span>
+                  {getStepLabel('execution')}
+                </Button>
+
+                <Button
+                  variant={currentScreen === 'closure' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleNavigation('closure')}
+                  className="whitespace-nowrap text-xs px-2 py-1 h-7"
+                >
+                  <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
+                    4
+                  </span>
+                  {getStepLabel('closure')}
+                </Button>
+              </>
             )}
-
-            {/* Remaining steps with proper numbering */}
-            <Button
-              variant={currentScreen === 'proposal' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleNavigation('proposal')}
-              className="whitespace-nowrap text-xs px-2 py-1 h-7"
-            >
-              <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
-                2
-              </span>
-              {getStepLabel('proposal')}
-            </Button>
-
-            <Button
-              variant={currentScreen === 'execution' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleNavigation('execution')}
-              className="whitespace-nowrap text-xs px-2 py-1 h-7"
-            >
-              <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
-                3
-              </span>
-              {getStepLabel('execution')}
-            </Button>
-
-            <Button
-              variant={currentScreen === 'closure' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleNavigation('closure')}
-              className="whitespace-nowrap text-xs px-2 py-1 h-7"
-            >
-              <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
-                4
-              </span>
-              {getStepLabel('closure')}
-            </Button>
           </div>
         </div>
       )}
