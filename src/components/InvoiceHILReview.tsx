@@ -129,31 +129,15 @@ const InvoiceHILReview = ({ ticketData, setTicketData, onNext }) => {
                     </div>
                   </div>
 
-                  {/* Invoice Details */}
+                  {/* Invoice Document */}
                   <div className="bg-white border border-gray-200 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-800 mb-3">Invoice Line Items (Extracted by Data Agents)</h4>
-                    <div className="space-y-3">
-                      <div className="border border-gray-200 rounded p-3">
-                        <div className="grid grid-cols-3 gap-2 text-sm">
-                          <div><strong>Item:</strong> Bosch All-in-one Metal Hand Tool Kit</div>
-                          <div><strong>Amount:</strong> ₹2,991.30</div>
-                          <div><strong>GL Code:</strong> 40010</div>
-                        </div>
-                      </div>
-                      <div className="border border-gray-200 rounded p-3">
-                        <div className="grid grid-cols-3 gap-2 text-sm">
-                          <div><strong>Item:</strong> Taparia Universal Tool Kit</div>
-                          <div><strong>Amount:</strong> ₹1,498.60</div>
-                          <div><strong>GL Code:</strong> 40010</div>
-                        </div>
-                      </div>
-                      <div className="border border-gray-200 rounded p-3 bg-yellow-50">
-                        <div className="grid grid-cols-3 gap-2 text-sm">
-                          <div><strong>Tax:</strong> IGST @ 18%</div>
-                          <div><strong>Amount:</strong> ₹684.90</div>
-                          <div><strong>Tax Code:</strong> I0</div>
-                        </div>
-                      </div>
+                    <h4 className="font-medium text-gray-800 mb-3">Original Tax Invoice Document</h4>
+                    <div className="flex justify-center">
+                      <img
+                        src="/lovable-uploads/dec729cb-29b1-4461-b85d-5594a6045f9c.png"
+                        alt="Gujarat Freight Tools Tax Invoice GST-3425-26"
+                        className="max-w-full h-auto border border-gray-300 rounded-lg shadow-sm"
+                      />
                     </div>
                   </div>
 
