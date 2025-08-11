@@ -13,9 +13,12 @@ import RCAAnalysis from '@/components/RCAAnalysis';
 import ResolutionProposal from '@/components/ResolutionProposal';
 import SAPExecution from '@/components/SAPExecution';
 import TicketClosure from '@/components/TicketClosure';
+import AgentsDashboard from '@/components/AgentsDashboard';
+import InvoiceTicketList from '@/components/InvoiceTicketList';
+import UnderConstruction from '@/components/UnderConstruction';
 
 const Index = () => {
-  const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [currentScreen, setCurrentScreen] = useState('agents-dashboard');
   const [showBackendActions, setShowBackendActions] = useState(false);
   const [incidentSubmitted, setIncidentSubmitted] = useState(false);
   const [ticketData, setTicketData] = useState({
@@ -35,6 +38,9 @@ const Index = () => {
 
   const getScreenTitle = (screen, isInvoice, isReport) => {
     const screenTitles = {
+      'agents-dashboard': 'AI MVP Generator: Intelligent Agent Dashboard',
+      'invoice-list': 'Invoice Processing Worklist',
+      'under-construction': 'Feature Under Development',
       dashboard: 'Incident Dashboard',
       incident: isInvoice ? 'Submit New Invoice for Processing' : isReport ? 'Create New Operational Incident' : 'New Incident',
       triage: isInvoice ? 'Invoice Ingestion & Initial Extraction' : isReport ? 'Incident Auto-Triage & Classification' : 'Agent Auto-Triage',
@@ -44,10 +50,13 @@ const Index = () => {
       closure: isInvoice ? 'Invoice Processed & Archived!' : isReport ? 'Issue Resolved & Ticket Closed!' : 'Ticket Closure'
     };
     
-    return screenTitles[screen] || 'Incident Management';
+    return screenTitles[screen] || 'AI MVP Generator';
   };
 
   const screens = {
+    'agents-dashboard': { title: 'AI MVP Generator: Intelligent Agent Dashboard', component: AgentsDashboard },
+    'invoice-list': { title: 'Invoice Processing Worklist', component: InvoiceTicketList },
+    'under-construction': { title: 'Feature Under Development', component: UnderConstruction },
     dashboard: { title: 'Incident Dashboard', component: Dashboard },
     incident: { 
       title: getScreenTitle('incident', isInvoiceProcessing, isReportFailure), 
@@ -81,27 +90,56 @@ const Index = () => {
     setCurrentScreen('incident');
     setIncidentSubmitted(false);
     setShowBackendActions(false);
-    // Scroll to top when navigating to new screen
+    // Set invoice processing mode
+    setTicketData(prev => ({
+      ...prev,
+      isInvoiceProcessing: true,
+      isReportFailure: false,
+      subject: 'Invoice Processing Request',
+      description: 'Processing invoice from GUJARAT FREIGHT TOOLS'
+    }));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleIncidentSubmit = () => {
     setIncidentSubmitted(true);
-    // Stay on incident screen after submit
   };
 
   const handleShowBackendActions = () => {
     if (incidentSubmitted) {
       setShowBackendActions(true);
-      setCurrentScreen('triage'); // Navigate to Agent Auto-Triage
-      // Scroll to top when navigating to new screen
+      setCurrentScreen('triage');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  // Add scroll to top functionality for all navigation
   const handleNavigation = (screen) => {
     setCurrentScreen(screen);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigateToInvoiceList = () => {
+    setCurrentScreen('invoice-list');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleInvoiceSelect = (invoiceId) => {
+    if (invoiceId === 'GUJARAT FREIGHT TOOLS') {
+      // Set up for invoice processing workflow
+      setTicketData(prev => ({
+        ...prev,
+        isInvoiceProcessing: true,
+        isReportFailure: false,
+        subject: 'Tax Invoice Processing',
+        description: `Processing invoice from ${invoiceId}`,
+        status: 'In Progress'
+      }));
+      setIncidentSubmitted(true);
+      setShowBackendActions(true);
+      setCurrentScreen('proposal'); // Start at HIL review stage
+    } else {
+      setCurrentScreen('under-construction');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -156,6 +194,21 @@ const Index = () => {
     if (isReportFailure) return 'RCA';
     return 'RCA';
   };
+
+  // Special rendering for agents dashboard
+  if (currentScreen === 'agents-dashboard') {
+    return <AgentsDashboard onNavigateToInvoiceList={handleNavigateToInvoiceList} />;
+  }
+
+  // Special rendering for invoice list
+  if (currentScreen === 'invoice-list') {
+    return <InvoiceTicketList onInvoiceSelect={handleInvoiceSelect} onBack={() => setCurrentScreen('agents-dashboard')} />;
+  }
+
+  // Special rendering for under construction
+  if (currentScreen === 'under-construction') {
+    return <UnderConstruction onBack={() => setCurrentScreen('agents-dashboard')} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
@@ -293,6 +346,9 @@ const Index = () => {
             }}
             onCreateNew={handleCreateNew}
             onSubmit={handleIncidentSubmit}
+            onNavigateToInvoiceList={handleNavigateToInvoiceList}
+            onInvoiceSelect={handleInvoiceSelect}
+            onBack={() => setCurrentScreen('agents-dashboard')}
           />
         )}
       </div>
