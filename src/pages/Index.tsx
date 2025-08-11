@@ -25,7 +25,8 @@ const Index = () => {
     poNumber: '',
     confidence: 92,
     status: 'New',
-    timeline: []
+    timeline: [],
+    isInvoiceProcessing: false
   });
 
   const isInvoiceProcessing = ticketData.isInvoiceProcessing;
