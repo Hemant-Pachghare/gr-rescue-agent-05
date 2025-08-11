@@ -31,7 +31,8 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
     aiProcessAgent: 'Generic AI Assistant'
   });
 
-  const isInvoiceProcessing = formData.shortDescription === 'New Tax Invoice Received: Gujarat Freight Tools';
+  // Make the check case-insensitive and more flexible
+  const isInvoiceProcessing = formData.shortDescription.toLowerCase().includes('new tax invoice received: gujarat freight tools');
 
   // Auto-populate fields based on short description
   useEffect(() => {
@@ -51,6 +52,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
         urgency: 'Medium',
         priority: 'Standard',
         assignmentGroup: 'AP Automation Agent',
+        assignedTo: '',
         notify: 'AP Team Lead, Tax Compliance Team',
         aiProcessAgent: 'Automated Invoice Processor'
       }));
@@ -61,17 +63,18 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
         incidentNumber: 'INC0001234',
         description: prev.shortDescription === '' ? '' : 'Details of the incident...',
         contactType: 'Self-service',
-        caller: prev.shortDescription === '' ? '' : 'Select Caller',
-        category: prev.shortDescription === '' ? '' : 'Select Category',
-        subcategory: prev.shortDescription === '' ? '' : 'Select Subcategory',
-        service: prev.shortDescription === '' ? '' : 'Select Service',
-        serviceOffering: prev.shortDescription === '' ? '' : 'Select Service Offering',
-        configurationItem: prev.shortDescription === '' ? '' : 'Select Configuration Item',
-        impact: prev.shortDescription === '' ? '' : 'Select Impact',
-        urgency: prev.shortDescription === '' ? '' : 'Select Urgency',
-        priority: prev.shortDescription === '' ? '' : 'Select Priority',
-        assignmentGroup: prev.shortDescription === '' ? '' : 'Select Assignment Group',
-        notify: prev.shortDescription === '' ? '' : 'Select Notification Recipient',
+        caller: prev.shortDescription === '' ? '' : '',
+        category: prev.shortDescription === '' ? '' : '',
+        subcategory: prev.shortDescription === '' ? '' : '',
+        service: prev.shortDescription === '' ? '' : '',
+        serviceOffering: prev.shortDescription === '' ? '' : '',
+        configurationItem: prev.shortDescription === '' ? '' : '',
+        impact: prev.shortDescription === '' ? '' : '',
+        urgency: prev.shortDescription === '' ? '' : '',
+        priority: prev.shortDescription === '' ? '' : '',
+        assignmentGroup: prev.shortDescription === '' ? '' : '',
+        assignedTo: '',
+        notify: prev.shortDescription === '' ? '' : '',
         aiProcessAgent: 'Generic AI Assistant'
       }));
     }
@@ -332,7 +335,7 @@ const IncidentCreation = ({ ticketData, setTicketData, onNext, onSubmit }) => {
                   />
                 </div>
 
-                {/* NEW FIELD: AI Process Agent */}
+                {/* AI Process Agent */}
                 <div>
                   <Label htmlFor="aiProcessAgent" className="text-slate-600 font-medium">AI Process Agent</Label>
                   <Select value={formData.aiProcessAgent} onValueChange={(value) => setFormData({ ...formData, aiProcessAgent: value })}>
