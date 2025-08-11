@@ -13,67 +13,67 @@ const Dashboard = ({ onCreateNew }) => {
   const agentCards = [
     // Core Accounting
     {
-      id: 'AGT0001001',
+      id: 'Autonomous Anomaly Detector',
       category: 'Core Accounting',
       state: 'Active',
-      priority: 'High Impact',
-      description: 'Autonomous Anomaly Detector: Continuously scans all journal entries 24/7, flagging unusual account combinations, times, or amounts.',
-      capabilities: 'Real-time monitoring, Pattern recognition',
+      priority: 'Critical',
+      description: 'Continuously scans all journal entries 24/7, flagging unusual account combinations, times, or amounts, and initiates an inquiry with the preparer.',
+      capabilities: 'Real-time monitoring, Pattern recognition, Automated inquiry',
       lastUpdated: '2 mins ago',
       stateClass: 'bg-green-100 text-green-800',
-      priorityClass: 'text-green-600'
+      priorityClass: 'text-red-600'
     },
     {
-      id: 'AGT0001002',
+      id: 'Intelligent Reconciliation Agent',
       category: 'Core Accounting',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Intelligent Reconciliation Agent: Automates reconciliation of high-volume accounts by matching transactions and identifying discrepancies.',
-      capabilities: 'Auto-matching, Variance analysis',
+      description: 'Automates reconciliation of high-volume accounts by matching transactions, identifying discrepancies, and independently investigating their origin.',
+      capabilities: 'Auto-matching, Variance analysis, Investigation workflows',
       lastUpdated: '5 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
     {
-      id: 'AGT0001003',
+      id: 'Accrual & Prepayment Manager',
       category: 'Core Accounting',
       state: 'Active',
       priority: 'Medium Impact',
-      description: 'Accrual & Prepayment Manager: Scans contracts and invoices to autonomously calculate and post month-end entries.',
-      capabilities: 'Contract analysis, Auto-posting',
+      description: 'Scans contracts and invoices to autonomously calculate, propose, and post month-end accrual and prepayment entries with documentation.',
+      capabilities: 'Contract analysis, Auto-posting, Documentation',
       lastUpdated: '15 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-blue-600'
     },
     {
-      id: 'AGT0001004',
+      id: 'Subsidiary Ledger Sentinel',
       category: 'Core Accounting',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Subsidiary Ledger Sentinel: Performs continuous reconciliation between GL control accounts and sub-ledgers.',
-      capabilities: 'Continuous monitoring, Auto-reconciliation',
+      description: 'Performs continuous reconciliation between the GL control accounts and sub-ledgers (AR, AP, FA), instantly flagging and investigating imbalances.',
+      capabilities: 'Continuous monitoring, Auto-reconciliation, Exception handling',
       lastUpdated: '30 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
     {
-      id: 'AGT0001005',
+      id: 'Automated Period-End Closer',
       category: 'Core Accounting',
       state: 'Active',
       priority: 'Critical',
-      description: 'Automated Period-End Closer: Orchestrates the entire month-end closing checklist and escalates exceptions.',
-      capabilities: 'Process orchestration, Exception handling',
+      description: 'Orchestrates the entire month-end closing checklist, executing tasks, verifying completion, and escalating exceptions or delays.',
+      capabilities: 'Process orchestration, Task automation, Exception escalation',
       lastUpdated: '1 hour ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-red-600'
     },
     {
-      id: 'AGT0001006',
+      id: 'FX Revaluation Agent',
       category: 'Core Accounting',
       state: 'Active',
       priority: 'Medium Impact',
-      description: 'FX Revaluation Agent: Monitors foreign currency exchange rates daily and automatically revalues balances.',
-      capabilities: 'Currency monitoring, Auto-revaluation',
+      description: 'Monitors foreign currency exchange rates daily, automatically revaluing balances and posting unrealized gains or losses.',
+      capabilities: 'Currency monitoring, Auto-revaluation, P&L posting',
       lastUpdated: '2 hours ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-blue-600'
@@ -81,194 +81,319 @@ const Dashboard = ({ onCreateNew }) => {
 
     // Accounts Receivable
     {
-      id: 'AGT0002001',
+      id: 'Compliance Verification Bot',
       category: 'Accounts Receivable',
       state: 'Active',
       priority: 'Critical',
-      description: 'Compliance Verification Bot: Cross-references journal entries against IFRS/GAAP requirements for revenue recognition.',
-      capabilities: 'Compliance checking, Standards verification',
+      description: 'Cross-references journal entries against IFRS/GAAP requirements to flag potential non-compliance in revenue recognition or lease accounting.',
+      capabilities: 'Compliance checking, Standards verification, Risk flagging',
       lastUpdated: '10 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-red-600'
     },
     {
-      id: 'AGT0002002',
+      id: 'Credit Policy Agent',
       category: 'Accounts Receivable',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Credit Policy Agent: Autonomously assesses new customer creditworthiness and recommends credit limits.',
-      capabilities: 'Credit assessment, Risk analysis',
+      description: 'Autonomously assesses new customer creditworthiness using external and internal data to recommend and set initial credit limits.',
+      capabilities: 'Credit assessment, Risk analysis, Limit recommendations',
       lastUpdated: '25 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
     {
-      id: 'AGT0002003',
+      id: 'Dynamic Risk-Based Collector',
       category: 'Accounts Receivable',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Dynamic Risk-Based Collector: Prioritizes collection activities and sends tailored collection notices.',
-      capabilities: 'Risk prioritization, Automated communications',
+      description: 'Prioritizes collection activities by analyzing customer patterns and risk signals, then autonomously sends tailored collection notices.',
+      capabilities: 'Risk prioritization, Automated communications, Pattern analysis',
       lastUpdated: '45 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
     {
-      id: 'AGT0002004',
+      id: 'Cash Application Specialist',
       category: 'Accounts Receivable',
       state: 'Active',
       priority: 'Medium Impact',
-      description: 'Cash Application Specialist: Automatically matches incoming cash receipts to open invoices.',
-      capabilities: 'Payment matching, Complex scenarios',
+      description: 'Automatically matches incoming cash receipts to open invoices, handling complex scenarios like partial or bundled payments.',
+      capabilities: 'Payment matching, Complex scenarios, Auto-application',
       lastUpdated: '1 hour ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-blue-600'
     },
+    {
+      id: 'Revenue Recognition Agent',
+      category: 'Accounts Receivable',
+      state: 'Active',
+      priority: 'High Impact',
+      description: 'For complex contracts, tracks the delivery of performance obligations and autonomously triggers revenue recognition.',
+      capabilities: 'Contract tracking, Performance obligations, Auto-triggering',
+      lastUpdated: '1.5 hours ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-green-600'
+    },
 
     // Accounts Payable
     {
-      id: 'AGT0003001',
+      id: 'Duplicate Payment Hunter',
       category: 'Accounts Payable',
       state: 'Active',
       priority: 'Critical',
-      description: 'Duplicate Payment Hunter: Scans all invoices in real-time to identify potential duplicates.',
-      capabilities: 'Real-time scanning, Duplicate detection',
+      description: 'Scans all paid and unpaid invoices in real-time to identify potential duplicates, placing suspect invoices on immediate payment hold.',
+      capabilities: 'Real-time scanning, Duplicate detection, Payment holds',
       lastUpdated: '5 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-red-600'
     },
     {
-      id: 'AGT0003002',
+      id: 'Vendor Master File Gatekeeper',
       category: 'Accounts Payable',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Vendor Master File Gatekeeper: Performs due diligence on new vendors to prevent fraud.',
-      capabilities: 'Vendor verification, Fraud prevention',
+      description: 'Performs due diligence on new vendors by verifying details against external databases and watchlists to prevent fraud.',
+      capabilities: 'Vendor verification, Fraud prevention, Database cross-reference',
       lastUpdated: '20 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
     {
-      id: 'AGT0003003',
+      id: 'Three-Way Match Maverick',
       category: 'Accounts Payable',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Three-Way Match Maverick: Autonomously matches invoices to purchase orders and goods receipts.',
-      capabilities: 'Three-way matching, Discrepancy resolution',
+      description: 'Autonomously matches invoices to purchase orders and goods receipt notes, initiating resolution for any discrepancies.',
+      capabilities: 'Three-way matching, Discrepancy resolution, Auto-matching',
       lastUpdated: '35 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
-
-    // Treasury
     {
-      id: 'AGT0005001',
-      category: 'Treasury',
+      id: 'Automated Invoice Processor',
+      category: 'Accounts Payable',
       state: 'Active',
-      priority: 'Critical',
-      description: 'Intelligent Cash Forecaster: Provides highly accurate 13-week cash flow forecasts.',
-      capabilities: 'Predictive analytics, Real-time integration',
-      lastUpdated: '15 mins ago',
+      priority: 'Medium Impact',
+      description: 'Receives, validates, and matches invoices, then autonomously posts the final journal entry to the ERP system (e.g., SAP).',
+      capabilities: 'Invoice processing, Validation, ERP integration',
+      lastUpdated: '50 mins ago',
       stateClass: 'bg-green-100 text-green-800',
-      priorityClass: 'text-red-600'
+      priorityClass: 'text-blue-600'
     },
+
+    // Product & Actual Costing
     {
-      id: 'AGT0005002',
-      category: 'Treasury',
+      id: 'Standard Costing Agent',
+      category: 'Product & Actual Costing',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Liquidity Optimization Agent: Monitors bank accounts and executes cash sweeps autonomously.',
-      capabilities: 'Cash concentration, Auto-execution',
-      lastUpdated: '30 mins ago',
+      description: 'Autonomously updates standard costs by monitoring changes in raw material prices, labor rates, and manufacturing overheads.',
+      capabilities: 'Cost monitoring, Auto-updates, Price tracking',
+      lastUpdated: '40 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
     {
-      id: 'AGT0005003',
-      category: 'Treasury',
+      id: 'Variance Analysis Investigator',
+      category: 'Product & Actual Costing',
       state: 'Active',
       priority: 'High Impact',
-      description: 'FX Exposure Management Bot: Tracks currency exposures and executes hedging strategies.',
-      capabilities: 'Exposure tracking, Auto-hedging',
+      description: 'Automatically identifies significant production cost variances and drills down into data to pinpoint the root cause.',
+      capabilities: 'Variance detection, Root cause analysis, Data drilling',
       lastUpdated: '1 hour ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
+    {
+      id: 'Product Margin Monitor',
+      category: 'Product & Actual Costing',
+      state: 'Active',
+      priority: 'Critical',
+      description: 'Tracks the gross margin of every product in real-time, alerting management when profitability drops below a set threshold.',
+      capabilities: 'Real-time tracking, Margin analysis, Threshold alerts',
+      lastUpdated: '30 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-red-600'
+    },
 
     // Asset Accounting
     {
-      id: 'AGT0004001',
+      id: 'Asset Acquisition Verifier',
       category: 'Asset Accounting',
       state: 'Active',
       priority: 'Medium Impact',
-      description: 'Asset Acquisition Verifier: Identifies potential capital expenditures and initiates approval workflows.',
-      capabilities: 'Capex identification, Workflow automation',
+      description: 'Automatically identifies potential capital expenditures from purchasing data and initiates a capitalization approval workflow.',
+      capabilities: 'Capex identification, Workflow automation, Approval routing',
       lastUpdated: '45 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-blue-600'
     },
     {
-      id: 'AGT0004002',
+      id: 'Ghost Asset Hunter',
       category: 'Asset Accounting',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Ghost Asset Hunter: Uses IoT sensors for continuous physical verification of assets.',
-      capabilities: 'IoT integration, Physical verification',
+      description: 'Uses RFID, network data, or IoT sensors for continuous physical verification of assets against the fixed asset register.',
+      capabilities: 'IoT integration, Physical verification, RFID tracking',
       lastUpdated: '2 hours ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
+    {
+      id: 'Depreciation Run Automator',
+      category: 'Asset Accounting',
+      state: 'Active',
+      priority: 'Medium Impact',
+      description: 'Autonomously calculates and posts the monthly depreciation charge for all assets based on policy.',
+      capabilities: 'Auto-calculation, Policy compliance, Monthly posting',
+      lastUpdated: '1.5 hours ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-blue-600'
+    },
 
     // Planning
     {
-      id: 'AGT0006001',
+      id: 'Dynamic Forecaster',
       category: 'Planning',
       state: 'Active',
       priority: 'Critical',
-      description: 'Dynamic Forecaster: Continuously updates financial forecasts with real-time data integration.',
-      capabilities: 'Real-time forecasting, Multi-source integration',
+      description: 'Continuously updates financial forecasts by integrating real-time sales, operational, and macroeconomic data.',
+      capabilities: 'Real-time forecasting, Multi-source integration, Predictive analytics',
       lastUpdated: '10 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-red-600'
     },
     {
-      id: 'AGT0006002',
+      id: 'Budget Variance Investigator',
       category: 'Planning',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Budget Variance Investigator: Identifies variances and provides automated narrative analysis.',
-      capabilities: 'Variance analysis, Narrative generation',
+      description: 'Not only identifies variances but autonomously drills down into transactional data to provide a narrative on why it occurred.',
+      capabilities: 'Variance analysis, Narrative generation, Data drilling',
       lastUpdated: '25 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-green-600'
+    },
+    {
+      id: 'Scenario Modeling Agent',
+      category: 'Planning',
+      state: 'Active',
+      priority: 'High Impact',
+      description: 'Runs thousands of simulations based on different assumptions to model potential impacts on profitability and cash flow.',
+      capabilities: 'Simulation modeling, Scenario analysis, Impact assessment',
+      lastUpdated: '1 hour ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-green-600'
+    },
+
+    // Inventory Management
+    {
+      id: 'Obsolete Inventory Identifier',
+      category: 'Inventory Management',
+      state: 'Active',
+      priority: 'High Impact',
+      description: 'Increases cash flow by identifying and flagging non-moving or obsolete inventory for disposal or write-down.',
+      capabilities: 'Obsolescence detection, Cash flow optimization, Write-down recommendations',
+      lastUpdated: '30 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-green-600'
+    },
+    {
+      id: 'Shrinkage & Theft Detector',
+      category: 'Inventory Management',
+      state: 'Active',
+      priority: 'Critical',
+      description: 'Reduces losses by analyzing inventory count discrepancies and transaction patterns to identify potential theft or shrinkage.',
+      capabilities: 'Loss prevention, Pattern analysis, Discrepancy detection',
+      lastUpdated: '45 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-red-600'
+    },
+
+    // Treasury
+    {
+      id: 'Intelligent Cash Forecaster',
+      category: 'Treasury',
+      state: 'Active',
+      priority: 'Critical',
+      description: 'Provides a highly accurate, rolling 13-week cash flow forecast by integrating real-time data from across the business.',
+      capabilities: 'Predictive analytics, Real-time integration, 13-week rolling forecast',
+      lastUpdated: '15 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-red-600'
+    },
+    {
+      id: 'Liquidity Optimization Agent',
+      category: 'Treasury',
+      state: 'Active',
+      priority: 'High Impact',
+      description: 'Continuously monitors bank accounts, autonomously executing cash sweeps to concentrate funds and minimize borrowing.',
+      capabilities: 'Cash concentration, Auto-execution, Liquidity management',
+      lastUpdated: '30 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-green-600'
+    },
+    {
+      id: 'FX Exposure Management Bot',
+      category: 'Treasury',
+      state: 'Active',
+      priority: 'High Impact',
+      description: 'Tracks foreign currency exposures in real-time and can autonomously execute predefined hedging strategies.',
+      capabilities: 'Exposure tracking, Auto-hedging, Real-time monitoring',
+      lastUpdated: '1 hour ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
     },
 
     // Corporate Secretarial & Compliance
     {
-      id: 'AGT0007001',
+      id: 'Regulatory Change Agent',
       category: 'Corporate Secretarial',
       state: 'Active',
       priority: 'Critical',
-      description: 'Regulatory Change Agent: Scans government gazettes 24/7 to identify new regulations.',
-      capabilities: '24/7 monitoring, Legal scanning',
+      description: 'Scans government gazettes and legal news 24/7 to identify new or amended laws that impact the company.',
+      capabilities: '24/7 monitoring, Legal scanning, Impact analysis',
       lastUpdated: '5 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-red-600'
     },
     {
-      id: 'AGT0007002',
+      id: 'Statutory Filings Automator',
       category: 'Corporate Secretarial',
       state: 'Active',
       priority: 'High Impact',
-      description: 'Statutory Filings Automator: Autonomously prepares and files routine statutory forms.',
-      capabilities: 'Auto-filing, Deadline tracking',
+      description: 'Autonomously prepares and files routine statutory forms with government bodies, ensuring deadlines are never missed.',
+      capabilities: 'Auto-filing, Deadline tracking, Form preparation',
       lastUpdated: '40 mins ago',
       stateClass: 'bg-green-100 text-green-800',
       priorityClass: 'text-green-600'
+    },
+    {
+      id: 'AML/KYC Screening Agent',
+      category: 'Corporate Secretarial',
+      state: 'Active',
+      priority: 'Critical',
+      description: 'Performs continuous screening of customer and vendor lists against global sanctions and Politically Exposed Persons (PEP) lists.',
+      capabilities: 'Continuous screening, Sanctions monitoring, PEP detection',
+      lastUpdated: '20 mins ago',
+      stateClass: 'bg-green-100 text-green-800',
+      priorityClass: 'text-red-600'
     }
   ];
 
-  const categories = ['all', 'Core Accounting', 'Accounts Receivable', 'Accounts Payable', 'Asset Accounting', 'Planning', 'Treasury', 'Corporate Secretarial'];
+  const categories = [
+    'all', 
+    'Core Accounting', 
+    'Accounts Receivable', 
+    'Accounts Payable', 
+    'Product & Actual Costing',
+    'Asset Accounting', 
+    'Planning', 
+    'Inventory Management',
+    'Treasury', 
+    'Corporate Secretarial'
+  ];
 
   const filteredAgents = selectedCategory === 'all' 
     ? agentCards 
@@ -327,7 +452,7 @@ const Dashboard = ({ onCreateNew }) => {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="font-semibold text-gray-600 uppercase tracking-wider">Agent ID</TableHead>
+                <TableHead className="font-semibold text-gray-600 uppercase tracking-wider">Agent Name</TableHead>
                 <TableHead className="font-semibold text-gray-600 uppercase tracking-wider">Status</TableHead>
                 <TableHead className="font-semibold text-gray-600 uppercase tracking-wider">Impact Level</TableHead>
                 <TableHead className="font-semibold text-gray-600 uppercase tracking-wider">Description & Function</TableHead>
@@ -336,8 +461,8 @@ const Dashboard = ({ onCreateNew }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAgents.map((agent) => (
-                <TableRow key={agent.id} className="hover:bg-gray-50">
+              {filteredAgents.map((agent, index) => (
+                <TableRow key={`${agent.id}-${index}`} className="hover:bg-gray-50">
                   <TableCell>
                     <span className="text-blue-600 font-medium hover:underline cursor-pointer">
                       {agent.id}
