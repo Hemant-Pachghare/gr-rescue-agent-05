@@ -287,10 +287,10 @@ const Index = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleNavigation('dashboard')}
+              onClick={() => handleNavigation(isInvoiceProcessing ? 'agents-dashboard' : 'dashboard')}
               className="whitespace-nowrap text-xs px-2 py-1 h-7"
             >
-              ← Back to Dashboard
+              ← Back to {isInvoiceProcessing ? 'Agents Dashboard' : 'Dashboard'}
             </Button>
             
             {/* For invoice processing, show different navigation */}
