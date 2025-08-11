@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, FileText, Calendar, DollarSign } from 'lucide-react';
+import { ArrowLeft, FileText, Calendar } from 'lucide-react';
 
 interface InvoiceTicketListProps {
   onInvoiceSelect: (invoiceId: string) => void;
@@ -87,7 +87,6 @@ const InvoiceTicketList: React.FC<InvoiceTicketListProps> = ({ onInvoiceSelect, 
                         <span>{invoice.date}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <DollarSign className="w-4 h-4" />
                         <span>{invoice.amount}</span>
                       </div>
                     </div>
