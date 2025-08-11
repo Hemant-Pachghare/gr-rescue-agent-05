@@ -27,7 +27,7 @@ const AgentsDashboard = ({ onAgentSelect }) => {
     }
   };
 
-  const AgentCard = ({ agent, onClick = null }) => {
+  const AgentCard = ({ agent, onClick = null }: { agent: any, onClick?: (() => void) | null }) => {
     const IconComponent = agent.icon;
     return (
       <Card 
@@ -78,12 +78,14 @@ const AgentsDashboard = ({ onAgentSelect }) => {
                 className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
                 style={{ color: '#6B7280' }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#374151';
-                  e.target.style.borderBottomColor = '#374151';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#374151';
+                  target.style.borderBottomColor = '#374151';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#6B7280';
-                  e.target.style.borderBottomColor = 'transparent';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#6B7280';
+                  target.style.borderBottomColor = 'transparent';
                 }}
               >
                 Compliance
@@ -93,12 +95,14 @@ const AgentsDashboard = ({ onAgentSelect }) => {
                 className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
                 style={{ color: '#6B7280' }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#374151';
-                  e.target.style.borderBottomColor = '#374151';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#374151';
+                  target.style.borderBottomColor = '#374151';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#6B7280';
-                  e.target.style.borderBottomColor = 'transparent';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#6B7280';
+                  target.style.borderBottomColor = 'transparent';
                 }}
               >
                 Insurance
@@ -108,12 +112,14 @@ const AgentsDashboard = ({ onAgentSelect }) => {
                 className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
                 style={{ color: '#6B7280' }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#374151';
-                  e.target.style.borderBottomColor = '#374151';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#374151';
+                  target.style.borderBottomColor = '#374151';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#6B7280';
-                  e.target.style.borderBottomColor = 'transparent';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#6B7280';
+                  target.style.borderBottomColor = 'transparent';
                 }}
               >
                 Internal Audit
@@ -123,12 +129,14 @@ const AgentsDashboard = ({ onAgentSelect }) => {
                 className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
                 style={{ color: '#6B7280' }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#374151';
-                  e.target.style.borderBottomColor = '#374151';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#374151';
+                  target.style.borderBottomColor = '#374151';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#6B7280';
-                  e.target.style.borderBottomColor = 'transparent';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#6B7280';
+                  target.style.borderBottomColor = 'transparent';
                 }}
               >
                 Treasury
@@ -138,12 +146,14 @@ const AgentsDashboard = ({ onAgentSelect }) => {
                 className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
                 style={{ color: '#6B7280' }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#374151';
-                  e.target.style.borderBottomColor = '#374151';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#374151';
+                  target.style.borderBottomColor = '#374151';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#6B7280';
-                  e.target.style.borderBottomColor = 'transparent';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#6B7280';
+                  target.style.borderBottomColor = 'transparent';
                 }}
               >
                 Direct Taxes
@@ -153,12 +163,14 @@ const AgentsDashboard = ({ onAgentSelect }) => {
                 className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
                 style={{ color: '#6B7280' }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#374151';
-                  e.target.style.borderBottomColor = '#374151';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#374151';
+                  target.style.borderBottomColor = '#374151';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#6B7280';
-                  e.target.style.borderBottomColor = 'transparent';
+                  const target = e.target as HTMLButtonElement;
+                  target.style.color = '#6B7280';
+                  target.style.borderBottomColor = 'transparent';
                 }}
               >
                 Indirect Taxes
