@@ -20,14 +20,7 @@ const AgentsDashboard = ({ onAgentSelect }) => {
     }
   };
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const AgentCard = ({ agent, onClick = null }: { agent: any, onClick?: (() => void) | null }) => {
+  const AgentCard = ({ agent, onClick }) => {
     const IconComponent = agent.icon;
     return (
       <Card 
@@ -37,10 +30,10 @@ const AgentsDashboard = ({ onAgentSelect }) => {
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-full" style={{ backgroundColor: '#FFFBEB' }}>
-                <IconComponent className="h-5 w-5" style={{ color: '#FBBF24' }} />
+              <div className="p-2 bg-yellow-50 rounded-full">
+                <IconComponent className="h-5 w-5 text-yellow-600" />
               </div>
-              <Badge className="text-xs" style={{ backgroundColor: '#DBEAFE', color: '#2563EB' }}>AI/ML</Badge>
+              <Badge className="bg-blue-100 text-blue-700 text-xs">AI/ML</Badge>
             </div>
           </div>
           <div>
@@ -53,7 +46,7 @@ const AgentsDashboard = ({ onAgentSelect }) => {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f3f4f6' }}>
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation Bar */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,118 +56,13 @@ const AgentsDashboard = ({ onAgentSelect }) => {
               <span className="font-bold text-gray-900">EY Logo</span>
             </div>
             <div className="flex items-center space-x-8">
-              <button 
-                onClick={() => scrollToSection('core-accounting')}
-                className="font-semibold pb-1 relative"
-                style={{ 
-                  color: '#374151',
-                  borderBottom: '2px solid #374151'
-                }}
-              >
-                Core Accounting
-              </button>
-              <button 
-                onClick={() => scrollToSection('compliance')}
-                className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#374151';
-                  target.style.borderBottomColor = '#374151';
-                }}
-                onMouseLeave={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#6B7280';
-                  target.style.borderBottomColor = 'transparent';
-                }}
-              >
-                Compliance
-              </button>
-              <button 
-                onClick={() => scrollToSection('insurance')}
-                className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#374151';
-                  target.style.borderBottomColor = '#374151';
-                }}
-                onMouseLeave={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#6B7280';
-                  target.style.borderBottomColor = 'transparent';
-                }}
-              >
-                Insurance
-              </button>
-              <button 
-                onClick={() => scrollToSection('internal-audit')}
-                className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#374151';
-                  target.style.borderBottomColor = '#374151';
-                }}
-                onMouseLeave={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#6B7280';
-                  target.style.borderBottomColor = 'transparent';
-                }}
-              >
-                Internal Audit
-              </button>
-              <button 
-                onClick={() => scrollToSection('treasury')}
-                className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#374151';
-                  target.style.borderBottomColor = '#374151';
-                }}
-                onMouseLeave={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#6B7280';
-                  target.style.borderBottomColor = 'transparent';
-                }}
-              >
-                Treasury
-              </button>
-              <button 
-                onClick={() => scrollToSection('direct-taxes')}
-                className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#374151';
-                  target.style.borderBottomColor = '#374151';
-                }}
-                onMouseLeave={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#6B7280';
-                  target.style.borderBottomColor = 'transparent';
-                }}
-              >
-                Direct Taxes
-              </button>
-              <button 
-                onClick={() => scrollToSection('indirect-taxes')}
-                className="pb-1 hover:font-semibold hover:border-b-2 transition-all duration-200"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#374151';
-                  target.style.borderBottomColor = '#374151';
-                }}
-                onMouseLeave={(e) => {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.color = '#6B7280';
-                  target.style.borderBottomColor = 'transparent';
-                }}
-              >
-                Indirect Taxes
-              </button>
+              <span className="font-semibold text-gray-900 border-b-2 border-gray-700 pb-1">Core Accounting</span>
+              <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Compliance</span>
+              <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Insurance</span>
+              <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Internal Audit</span>
+              <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Treasury</span>
+              <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Direct Taxes</span>
+              <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Indirect Taxes</span>
             </div>
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
           </div>
@@ -186,22 +74,22 @@ const AgentsDashboard = ({ onAgentSelect }) => {
         {/* Main Title */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-gray-900">
-            CFO's Office <span style={{ color: '#FBBF24' }}>Agentverse</span>
+            CFO's Office <span className="text-yellow-400">Agentverse</span>
           </h1>
         </div>
 
         {/* 1. Core Accounting */}
-        <div id="core-accounting" className="mb-12">
+        <div className="mb-12">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">1. Core Accounting</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
+            <div className="w-24 h-0.5 bg-yellow-400 mb-3"></div>
             <p className="text-gray-600">Enhancing the integrity and efficiency of financial reporting through real-time, autonomous analysis.</p>
           </div>
 
           {/* 1.1 General Ledger and Accounting */}
-          <div id="gl-accounting" className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
+              <div className="w-1 h-6 bg-yellow-400 mr-4"></div>
               <h3 className="text-xl font-bold text-gray-900">1.1 General Ledger and Accounting</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -239,9 +127,9 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
 
           {/* 1.2 Accounts Receivable */}
-          <div id="accounts-receivable" className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
+              <div className="w-1 h-6 bg-yellow-400 mr-4"></div>
               <h3 className="text-xl font-bold text-gray-900">1.2 Accounts Receivable</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -274,9 +162,9 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
 
           {/* 1.3 Accounts Payable */}
-          <div id="accounts-payable" className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
+              <div className="w-1 h-6 bg-yellow-400 mr-4"></div>
               <h3 className="text-xl font-bold text-gray-900">1.3 Accounts Payable</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -317,9 +205,9 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
 
           {/* 1.4 Product & Actual Costing */}
-          <div id="product-costing" className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
+              <div className="w-1 h-6 bg-yellow-400 mr-4"></div>
               <h3 className="text-xl font-bold text-gray-900">1.4 Product & Actual Costing</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -342,9 +230,9 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
 
           {/* 1.5 Asset Accounting */}
-          <div id="asset-accounting" className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
+              <div className="w-1 h-6 bg-yellow-400 mr-4"></div>
               <h3 className="text-xl font-bold text-gray-900">1.5 Asset Accounting</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -367,9 +255,9 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
 
           {/* 1.6 Planning */}
-          <div id="planning" className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
+              <div className="w-1 h-6 bg-yellow-400 mr-4"></div>
               <h3 className="text-xl font-bold text-gray-900">1.6 Planning</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -393,10 +281,10 @@ const AgentsDashboard = ({ onAgentSelect }) => {
         </div>
 
         {/* Inventory Management */}
-        <div id="inventory-management" className="mb-12">
+        <div className="mb-12">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Inventory Management</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
+            <div className="w-24 h-0.5 bg-yellow-400 mb-3"></div>
             <p className="text-gray-600">Optimizing inventory levels and reducing carrying costs through intelligent analysis.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -414,10 +302,10 @@ const AgentsDashboard = ({ onAgentSelect }) => {
         </div>
 
         {/* 2. Corporate Secretarial & Compliance */}
-        <div id="compliance" className="mb-12">
+        <div className="mb-12">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">2. Corporate Secretarial & Compliance</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
+            <div className="w-24 h-0.5 bg-yellow-400 mb-3"></div>
             <p className="text-gray-600">Ensuring an always-on state of compliance through continuous monitoring and automated response to regulatory changes.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -434,35 +322,11 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
         </div>
 
-        {/* 3. Insurance */}
-        <div id="insurance" className="mb-12">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">3. Insurance</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
-            <p className="text-gray-600">Transforming claims, underwriting, and risk management with intelligent, data-driven automation.</p>
-          </div>
-          <div className="text-center py-8 text-gray-500">
-            <p>Agents coming soon...</p>
-          </div>
-        </div>
-
-        {/* 4. Internal Audit, Risk & Assurance */}
-        <div id="internal-audit" className="mb-12">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">4. Internal Audit, Risk & Assurance</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
-            <p className="text-gray-600">Automating the entire audit lifecycle to free up human auditors for strategic, high-impact analysis.</p>
-          </div>
-          <div className="text-center py-8 text-gray-500">
-            <p>Agents coming soon...</p>
-          </div>
-        </div>
-
         {/* 5. Treasury */}
-        <div id="treasury" className="mb-12">
+        <div className="mb-12">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">5. Treasury</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
+            <div className="w-24 h-0.5 bg-yellow-400 mb-3"></div>
             <p className="text-gray-600">Optimizing cash flow, managing financial risk, and ensuring liquidity with real-time, predictive insights.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -484,28 +348,25 @@ const AgentsDashboard = ({ onAgentSelect }) => {
           </div>
         </div>
 
-        {/* 6. Direct Taxes */}
-        <div id="direct-taxes" className="mb-12">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">6. Direct Taxes</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
-            <p className="text-gray-600">Streamlining tax compliance and planning through automated data aggregation, calculation, and analysis.</p>
-          </div>
-          <div className="text-center py-8 text-gray-500">
-            <p>Agents coming soon...</p>
-          </div>
-        </div>
-
-        {/* 7. Indirect Taxes */}
-        <div id="indirect-taxes" className="mb-12">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">7. Indirect Taxes</h2>
-            <div className="w-24 h-0.5 mb-3" style={{ backgroundColor: '#FBBF24' }}></div>
-            <p className="text-gray-600">Ensuring transactional compliance for VAT/GST with real-time determination and automated reporting.</p>
-          </div>
-          <div className="text-center py-8 text-gray-500">
-            <p>Agents coming soon...</p>
-          </div>
+        {/* Placeholder sections */}
+        <div className="space-y-12">
+          {[
+            { number: "3", title: "Insurance", description: "Transforming claims, underwriting, and risk management with intelligent, data-driven automation." },
+            { number: "4", title: "Internal Audit, Risk & Assurance", description: "Automating the entire audit lifecycle to free up human auditors for strategic, high-impact analysis." },
+            { number: "6", title: "Direct Taxes", description: "Streamlining tax compliance and planning through automated data aggregation, calculation, and analysis." },
+            { number: "7", title: "Indirect Taxes", description: "Ensuring transactional compliance for VAT/GST with real-time determination and automated reporting." }
+          ].map((section) => (
+            <div key={section.number} className="mb-12">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{section.number}. {section.title}</h2>
+                <div className="w-24 h-0.5 bg-yellow-400 mb-3"></div>
+                <p className="text-gray-600">{section.description}</p>
+              </div>
+              <div className="text-center py-8 text-gray-500">
+                <p>Agents coming soon...</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
