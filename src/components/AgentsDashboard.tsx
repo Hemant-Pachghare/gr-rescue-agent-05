@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -54,10 +54,23 @@ interface AgentsDashboardProps {
 }
 
 const AgentsDashboard: React.FC<AgentsDashboardProps> = ({ onNavigateToInvoiceList }) => {
+  const [activeSection, setActiveSection] = useState('core-accounting');
+
+  const navigationSections = [
+    { id: 'core-accounting', label: 'Core Accounting' },
+    { id: 'compliance', label: 'Compliance' },
+    { id: 'insurance', label: 'Insurance' },
+    { id: 'internal-audit', label: 'Internal Audit' },
+    { id: 'treasury', label: 'Treasury' },
+    { id: 'direct-taxes', label: 'Direct Taxes' },
+    { id: 'indirect-taxes', label: 'Indirect Taxes' }
+  ];
+
   const handleNavClick = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(sectionId);
     }
   };
 
@@ -69,6 +82,31 @@ const AgentsDashboard: React.FC<AgentsDashboardProps> = ({ onNavigateToInvoiceLi
     }
   };
 
+  // Handle scroll to update active section
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navigationSections.map(section => ({
+        id: section.id,
+        element: document.getElementById(section.id)
+      }));
+
+      const currentSection = sections.find(section => {
+        if (section.element) {
+          const rect = section.element.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection.id);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f3f4f6' }}>
       {/* Navigation Header */}
@@ -78,51 +116,21 @@ const AgentsDashboard: React.FC<AgentsDashboardProps> = ({ onNavigateToInvoiceLi
             <div className="flex items-center space-x-8">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gray-300 rounded"></div>
-                <span className="font-bold text-gray-900">EY Logo</span>
               </div>
               <nav className="flex space-x-6">
-                <button 
-                  onClick={() => handleNavClick('core-accounting')}
-                  className="font-bold text-gray-800 border-b-2 border-gray-800 pb-1"
-                >
-                  Core Accounting
-                </button>
-                <button 
-                  onClick={() => handleNavClick('compliance')}
-                  className="text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-gray-800 hover:pb-1 transition-all"
-                >
-                  Compliance
-                </button>
-                <button 
-                  onClick={() => handleNavClick('insurance')}
-                  className="text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-gray-800 hover:pb-1 transition-all"
-                >
-                  Insurance
-                </button>
-                <button 
-                  onClick={() => handleNavClick('internal-audit')}
-                  className="text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-gray-800 hover:pb-1 transition-all"
-                >
-                  Internal Audit
-                </button>
-                <button 
-                  onClick={() => handleNavClick('treasury')}
-                  className="text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-gray-800 hover:pb-1 transition-all"
-                >
-                  Treasury
-                </button>
-                <button 
-                  onClick={() => handleNavClick('direct-taxes')}
-                  className="text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-gray-800 hover:pb-1 transition-all"
-                >
-                  Direct Taxes
-                </button>
-                <button 
-                  onClick={() => handleNavClick('indirect-taxes')}
-                  className="text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-gray-800 hover:pb-1 transition-all"
-                >
-                  Indirect Taxes
-                </button>
+                {navigationSections.map((section) => (
+                  <button 
+                    key={section.id}
+                    onClick={() => handleNavClick(section.id)}
+                    className={`transition-all ${
+                      activeSection === section.id 
+                        ? 'font-bold text-gray-800 border-b-2 border-gray-800 pb-1'
+                        : 'text-gray-500 hover:text-gray-800 hover:font-bold hover:border-b-2 hover:border-gray-800 hover:pb-1'
+                    }`}
+                  >
+                    {section.label}
+                  </button>
+                ))}
               </nav>
             </div>
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
@@ -193,7 +201,7 @@ const AgentsDashboard: React.FC<AgentsDashboardProps> = ({ onNavigateToInvoiceLi
               />
               <AgentCard
                 title="Journal Entry Auditor"
-                description="Placeholder for potential future card in Core Accounting"
+                description="Performs real-time analysis of journal entries to identify patterns that could indicate errors or fraudulent activity."
                 icon={Search}
                 onClick={() => handleAgentClick('Journal Entry Auditor')}
               />
@@ -371,7 +379,7 @@ const AgentsDashboard: React.FC<AgentsDashboardProps> = ({ onNavigateToInvoiceLi
               <div className="w-1 h-6 mr-4" style={{ backgroundColor: '#FBBF24' }}></div>
               <h3 className="text-xl font-bold text-gray-900">Inventory Management</h3>
             </div>
-            <p className="text-gray-600 mb-6">General description provided previously</p>
+            <p className="text-gray-600 mb-6">Optimizing inventory levels and reducing carrying costs through intelligent monitoring and analysis.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <AgentCard
                 title="Obsolete Inventory Identifier"
