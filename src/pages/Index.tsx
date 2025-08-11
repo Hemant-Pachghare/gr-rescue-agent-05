@@ -28,14 +28,34 @@ const Index = () => {
     timeline: []
   });
 
+  const isInvoiceProcessing = ticketData.isInvoiceProcessing;
+
   const screens = {
     dashboard: { title: 'Incident Dashboard', component: Dashboard },
-    incident: { title: 'New Incident', component: IncidentCreation },
-    triage: { title: 'Agent Auto-Triage', component: AgentTriage },
-    rca: { title: 'RCA', component: RCAAnalysis },
-    proposal: { title: 'Resolution Proposal', component: ResolutionProposal },
-    execution: { title: 'SAP Execution', component: SAPExecution },
-    closure: { title: 'Ticket Closure', component: TicketClosure }
+    incident: { 
+      title: isInvoiceProcessing ? 'Submit New Invoice for Processing' : 'New Incident', 
+      component: IncidentCreation 
+    },
+    triage: { 
+      title: isInvoiceProcessing ? 'Invoice Ingestion & Initial Extraction' : 'Agent Auto-Triage', 
+      component: AgentTriage 
+    },
+    rca: { 
+      title: isInvoiceProcessing ? 'Tax Invoice Data Extraction & Validation' : 'RCA', 
+      component: RCAAnalysis 
+    },
+    proposal: { 
+      title: isInvoiceProcessing ? 'Tax Invoice Review & Approval' : 'Resolution Proposal', 
+      component: ResolutionProposal 
+    },
+    execution: { 
+      title: isInvoiceProcessing ? 'ERP Posting Execution - AI Action In Progress' : 'SAP Execution', 
+      component: SAPExecution 
+    },
+    closure: { 
+      title: isInvoiceProcessing ? 'Invoice Processed & Archived!' : 'Ticket Closure', 
+      component: TicketClosure 
+    }
   };
 
   const CurrentComponent = screens[currentScreen]?.component;
@@ -76,7 +96,7 @@ const Index = () => {
           <div className="flex justify-between items-center h-12">
             <div className="flex items-center">
               <h1 className="text-base font-semibold text-gray-900">
-                {screens[currentScreen]?.title || 'SAP PO Issue Resolution'}
+                {screens[currentScreen]?.title || 'Incident Management'}
               </h1>
             </div>
             {currentScreen !== 'dashboard' && (
@@ -111,7 +131,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 1
               </span>
-              New Incident
+              {isInvoiceProcessing ? 'Invoice Submission' : 'New Incident'}
             </Button>
 
             {/* Show Backend Actions button OR Backend Actions group */}
@@ -124,11 +144,13 @@ const Index = () => {
                 disabled={!incidentSubmitted}
               >
                 <Cog className="mr-1 h-3 w-3" />
-                [Show Backend Actions]
+                {isInvoiceProcessing ? '[Start Processing]' : '[Show Backend Actions]'}
               </Button>
             ) : (
               <div className="flex items-center space-x-1 px-2 py-1 bg-gray-50 rounded-md border border-gray-200 h-7">
-                <span className="text-xs font-medium text-gray-600 italic">Backend Actions</span>
+                <span className="text-xs font-medium text-gray-600 italic">
+                  {isInvoiceProcessing ? 'Processing Actions' : 'Backend Actions'}
+                </span>
                 <div className="flex space-x-1">
                   <Button
                     variant={currentScreen === 'triage' ? 'default' : 'outline'}
@@ -136,7 +158,7 @@ const Index = () => {
                     onClick={() => handleNavigation('triage')}
                     className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
                   >
-                    Agent Auto-Triage
+                    {isInvoiceProcessing ? 'Orchestration' : 'Agent Auto-Triage'}
                   </Button>
                   <Button
                     variant={currentScreen === 'rca' ? 'default' : 'outline'}
@@ -144,7 +166,7 @@ const Index = () => {
                     onClick={() => handleNavigation('rca')}
                     className="whitespace-nowrap text-xs px-1 py-0 h-5 text-[10px]"
                   >
-                    RCA
+                    {isInvoiceProcessing ? 'Data Extraction' : 'RCA'}
                   </Button>
                 </div>
               </div>
@@ -160,7 +182,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 2
               </span>
-              Resolution Proposal
+              {isInvoiceProcessing ? 'Human Review' : 'Resolution Proposal'}
             </Button>
 
             <Button
@@ -172,7 +194,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 3
               </span>
-              SAP Execution
+              {isInvoiceProcessing ? 'ERP Posting' : 'SAP Execution'}
             </Button>
 
             <Button
@@ -184,7 +206,7 @@ const Index = () => {
               <span className="mr-1 text-xs bg-gray-200 rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
                 4
               </span>
-              Ticket Closure
+              {isInvoiceProcessing ? 'Processing Complete' : 'Ticket Closure'}
             </Button>
           </div>
         </div>
